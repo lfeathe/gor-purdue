@@ -14,6 +14,7 @@ test_client.init()
 """Create Game"""
 #Make Request(CreateGame)
 
+#COMMNET TO TEST
 
 map_info = sc_pb.LocalMap()
 #Windows
