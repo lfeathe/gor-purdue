@@ -9,7 +9,7 @@ import websocket
 
 from s2clientprotocol import sc2api_pb2 as sc_pb
 
-FORMAT = '%(asctime)s %(levelname)s %(lineno)d %(message)s'
+FORMAT = '%(asctime)s %(module)s %(levelname)s %(lineno)d %(message)s'
 logging.basicConfig(level=logging.INFO, format=FORMAT)
 logger = logging.getLogger(__name__)
 
@@ -25,7 +25,7 @@ class sc2(object):
         try:
             self.conn = websocket.create_connection("ws://%s:%s/sc2api" % (address, port), timeout=60)
             self.is_connected = self.conn
-            logger.Info('sc2 is connected.')
+            logger.info('sc2 is connected.')
         except Exception as ex:
             logger.error('While connecting to sc2: %s' % (str(ex)))
 
