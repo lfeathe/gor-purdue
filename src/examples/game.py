@@ -2,7 +2,8 @@ from s2clientprotocol import sc2api_pb2 as sc_pb
 from s2clientprotocol import raw_pb2 as raw_pb
 
 import sys
-sys.path.append('../core')
+import multiprocessing
+sys.path.append('..\core')
 from sc2_comm import sc2
 from core import Core
 
@@ -18,9 +19,9 @@ test_client.init()
 
 map_info = sc_pb.LocalMap()
 #Windows
-#map_info.map_path = "C:\Program Files (x86)\StarCraft II\Maps\Melee\Simple128.SC2Map"
+map_info.map_path = "C:\Program Files (x86)\StarCraft II\Maps\Melee\Simple128.SC2Map"
 #Mac
-map_info.map_path = "/Applications/StarCraft II/Maps/Melee/Simple128.SC2Map"
+#map_info.map_path = "/Applications/StarCraft II/Maps/Melee/Simple128.SC2Map"
 create_game = sc_pb.RequestCreateGame(local_map = map_info)
 create_game.player_setup.add(type=1)
 create_game.player_setup.add(type=2)
@@ -33,6 +34,7 @@ print(test_client.comm.send(create_game = create_game))
 """Join Game"""
 #Make Requst(JoinGame)
 
+#
 interface_options = sc_pb.InterfaceOptions(raw = True, score = False)
 join_game = sc_pb.RequestJoinGame(race = 3, options = interface_options)
 
