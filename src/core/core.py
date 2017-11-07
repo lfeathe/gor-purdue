@@ -24,6 +24,8 @@ FORMAT = '%(asctime)s %(module)s %(levelname)s %(lineno)d %(message)s'
 logging.basicConfig(level=logging.INFO, format=FORMAT)
 logger = logging.getLogger(__name__)
 
+
+# connect to starcraft 2 API
 class Core(object):
 
     def __init__(self):
@@ -38,12 +40,13 @@ class Core(object):
 
         elif sys.platform == "win32": # Windows
             pass
-            #self.launcher_path =
-            #self.map_path =
+            # self.launcher_path =
+            # self.map_path =
 
         else:
             logger.error("Sorry, we cannot start on your OS.")
 
+    # open starcraft 2
     def init(self):
 
         # execute SC2 client.
@@ -55,12 +58,13 @@ class Core(object):
         except:
             logger.error("Failed to open sc2.")
 
-        #connection between core and sc2_client using sc2 protobuf.
+        # connection between core and sc2_client using sc2 protobuf.
         self.comm.open()
 
     def deinit(self):
         pass
 
+    # start new game
     def _start_new_game(self):
 
         # create a game
@@ -94,7 +98,7 @@ class Core(object):
         except Exception as ex:
             logger.error('While joining the game: %s'%str(ex))
 
-        # Game Start
+        # Game Start (print a message that the game has started)
         try:
             print(self.comm.send(step=sc_pb.RequestStep(count=1)))
 
@@ -102,11 +106,12 @@ class Core(object):
         except Exception as ex:
             logger.error('While starting a new game: %s'%str(ex))
 
-
+    # call function start new game
     def run(self):
 
         self._start_new_game()
 
+        # make an agent -add prequsite to check minerals here
         list_unit_tag = []
         observation = sc_pb.RequestObservation()
         t = self.comm.send(observation=observation)
@@ -123,6 +128,7 @@ class Core(object):
         action.actions.add(action_raw=action_raw)
         self.comm.send(action=action)
 
+        # cause agent to say hello
         probe = Agent()
         probe.spawn(list_unit_tag[0], 84,
                     initial_knowledge=[
@@ -146,21 +152,17 @@ class Core(object):
             probe.run()
         except KeyboardInterrupt:
             pass
-        probe.destroy()
+        probe.destroy()   # destroy agent after goal is complete
         print('The agent is terminated.')
 
 
-
-
-
-
-
+# make a core class
 if __name__ == '__main__':
     core = Core()
     logger.info('Core initializing...')
-    core.init()
+    core.init() # connect to api
     logger.info('Core running...')
-    core.run()
+    core.run() # run the code above
     logger.info('Core deinitializing...')
-    core.deinit()
+    core.deinit() # Close the connection when done
     logger.info('Core terminated.')
